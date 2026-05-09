@@ -66,7 +66,7 @@ async function HomeMovies() {
     currentQuery = randomWord;
     page = 1;
     const res = await fetch(
-      `http://www.omdbapi.com/?s=${randomWord}&apikey=a0c86024`,
+      `https://www.omdbapi.com/?s=${randomWord}&apikey=a0c86024`,
     );
     const data = await res.json();
     dataOfMovies = data.Search;
@@ -82,7 +82,7 @@ async function getData() {
     loader.classList.remove("hidden");
 
     const res = await fetch(
-      `http://www.omdbapi.com/?s=${currentQuery}&apikey=a0c86024`,
+      `https://www.omdbapi.com/?s=${currentQuery}&apikey=a0c86024`,
     );
     const data = await res.json();
     if (data.Response === "False") {
@@ -122,7 +122,7 @@ function renderFilteredMovies(movies) {
 async function getMoreMovies(query, page) {
   try {
     const res = await fetch(
-      `http://www.omdbapi.com/?s=${query}&page=${page}&apikey=a0c86024`,
+      `https://www.omdbapi.com/?s=${query}&page=${page}&apikey=a0c86024`,
     );
     const data = await res.json();
     loader.classList.add("hidden");
@@ -198,7 +198,7 @@ loadMore.addEventListener("click", async function () {
     const detailedMovie = await Promise.all(
       movies.map(async (movie) => {
         const res = await fetch(
-          `http://www.omdbapi.com/?i=${movie.imdbID}&apikey=a0c86024`,
+          `https://www.omdbapi.com/?i=${movie.imdbID}&apikey=a0c86024`,
         );
         return await res.json();
       }),
@@ -226,7 +226,7 @@ async function getByGenre(genre) {
   const detailedMovie = await Promise.all(
     dataOfMovies.map(async (movie) => {
       const res = await fetch(
-        `http://www.omdbapi.com/?i=${movie.imdbID}&apikey=a0c86024`,
+        `https://www.omdbapi.com/?i=${movie.imdbID}&apikey=a0c86024`,
       );
       const data = await res.json();
 

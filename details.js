@@ -9,7 +9,7 @@ async function getMovieDetails() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
-    const res = await fetch(`http://www.omdbapi.com/?i=${id}&apikey=a0c86024`);
+    const res = await fetch(`https://www.omdbapi.com/?i=${id}&apikey=a0c86024`);
     const data = await res.json();
     console.log(data);
 
