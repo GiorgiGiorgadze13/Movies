@@ -9,19 +9,19 @@ async function getMovieDetails() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
-    const res = await fetch(`https://www.omdbapi.com/?i=${id}&apikey=a0c86024`);
+    const res = await fetch(`https://www.omdbapi.com/?i=${id}&apikey=6966b57d`);
     const data = await res.json();
     console.log(data);
 
     const html = `
    <ul class="ul-Details">
    <div>  <img src=${data.Poster}  /> </div>
-  <li>Title:${data.Title}</li>
-    <li>Year:${data.Year}</li>
-  <li>Actors:${data.Actors}</li>
-  <li>Genre:${data.Genre}</li>
+  <li>Title: ${data.Title}</li>
+    <li>Year: ${data.Year}</li>
+  <li>Actors: ${data.Actors}</li>
+  <li>Genre: ${data.Genre}</li>
   <li class=posterImg>Description: ${data.Plot}</li>
-    <li>Year:${data.Year}</li>
+    <li>Year: ${data.Year}</li>
     <li>IMDB: ${data.imdbRating}</li>
   </ul>
 
@@ -35,7 +35,6 @@ async function getMovieDetails() {
   }
 }
 getMovieDetails();
-
 const apiKey = "AIzaSyDT6BJLWdsJLH3e_zY3s1BUSzj1l74QtCs";
 
 async function getYoutubeData(movieTitle) {

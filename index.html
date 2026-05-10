@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Concert+One&family=Karla:ital,wght@0,200..800;1,200..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container"> 
  
-    <div class=search>
+    <div class="search">
                                      <a class="Home indexHome" href="index.html">Home Page</a>
 
         <input type="text" placeholder="TYPE MOVIE NAME" class="input">
         <button class="searchBtn">SEARCH</button>
     </div>
     <div class="genres">
-            <ul>
+            <ul >
                 <li><button class="genre-btn" data-genre="Action"> Action</button> </li>
                  <li><button class="genre-btn" data-genre="Thriller"> Thriller</button> </li>
                 <li><button class="genre-btn" data-genre="Crime"> Crime</button> </li>
@@ -27,6 +30,21 @@
  
                
             </ul>
+    </div>
+    <div class="YearsFilter" >
+         <select id="fromYear">
+            
+         </select> <span class="from-to">From</span> 
+                 <select id="toYear"> </select> <span class="from-to">To</span>
+
+    </div>
+    <div class="TvSerialFilter">
+    <select name="type" id="type">
+        <option value="">Choose Movie or Series</option>
+        <option value="movie">Movies</option>
+                <option value="series">Series</option>
+
+    </select>    
     </div>
     <div class="loader hidden"></div>
     <div class="Movies">

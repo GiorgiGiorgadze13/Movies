@@ -1,8 +1,12 @@
+body{
+      font-family: "Karla", sans-serif;
+
+}
 .ul-Details{
     list-style: none;
-    li{
+   & li{
         padding-top: 15px;
-        color:violet
+        color:#a8a8a8
     }
 }
 .ul-List{
@@ -12,11 +16,25 @@
     gap: 25px;
      color: blueviolet;
      margin-top: 50px;
+  
+}
+   .movieTitle{
+    display: flex;
+    flex-direction: column;
+    color:#f5c518 ;
+    font-size: 20px;
+    &:hover{ scale: 1.1};
+       
+ 
+    
+}
+.movieTitle p{
+    width: 250px;
 }
 
 img{
-    width: 360px;
-    height: 360px;
+    width: 300px;
+    height: 300px;
     border-radius: 20px;
 }
 
@@ -30,21 +48,28 @@ img{
     align-items: center;
     gap: 10px;
     
+    
 }
 
 input{
     padding: 20px 40px;
-    background-color: brown;
+    background-color: 2b2b2b;
     border-radius: 30px;
     border:none;
+    font-size: 20px;
  }
 .searchBtn{
     padding: 20px 40px;
 border-radius: 30px;
 border: none;
 background-color: blueviolet;
-color: green;
+color: darkblue;
 cursor: pointer;
+font-size: 20px;
+
+ &:hover{
+        scale: 1.1;
+    }
 }
 .error{
      display: flex;
@@ -61,11 +86,12 @@ cursor: pointer;
     align-items: center;
 }
 .Home{
+    font-size: 20px;
     padding: 20px;
     margin-left: 40px;
     border-radius: 20px;
     border: none;
-    background-color: blue;
+    background-color: #e50914;;
     color: aquamarine;
      margin-top: 20px;
          display: inline-block;
@@ -73,6 +99,9 @@ cursor: pointer;
        text-decoration: none;
        cursor: pointer;
        margin-bottom: 40px;
+       &:hover{
+        scale: 1.2;
+       }
     
 }
 .load{
@@ -91,18 +120,7 @@ cursor: pointer;
 
 }
  
-.movieTitle{
-    display: flex;
-    flex-direction: column;
-    color:goldenrod;
-    font-size: 20px;
-     
-
-    
-}
-.title{
-    max-width: 200px;
-}
+  
 body{
     background-color: #141414;
 }
@@ -145,12 +163,15 @@ body{
          color: aqua;
         font-size: 30px;
         border: none;
-        background-color: blue;
+        background-color: green;
         padding: 20px 30px;
         border-radius: 25px;
                 cursor: pointer;
-
-      }
+    transition: all 0.3s ease;
+            &:hover{
+                scale: 0.8;
+            }
+      } 
 
 }
 }
@@ -161,4 +182,63 @@ body{
 }
 .trailer {
   width: 60%;
+}
+#fromYear,#toYear{
+    padding: 20px;
+    border-radius: 25px;
+    border: none;
+    background-color: #ff00aa ;
+    color:white;
+    margin-left:30px;
+        font-size: 20px;
+
+}
+ 
+#type{
+    margin-top: 40px;
+       padding: 20px;
+    border-radius: 25px;
+    border: none;
+    background-color: #ff00aa ;
+    color:white;
+    margin-left:30px;
+    font-size: 20px;
+}
+
+.from-to{
+    color: aliceblue;
+    font-size: 18px;
+}
+
+
+@media (max-width:1534px){
+.trailer{
+    width: 50%;
+}
+}
+
+
+
+@media (max-width: 1130px) {
+    .genres{
+        & ul{
+            display: flex;
+            flex-wrap: wrap;
+        }
+    }
+}
+
+@media (max-width:917px){
+    .details-wrapper{
+        flex-direction: column;
+    }
+    .trailer{
+    width: 70%;
+}
+}
+
+@media (max-width:539px){
+    .search{
+        flex-direction: column;
+    }
 }

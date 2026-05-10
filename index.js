@@ -6,11 +6,17 @@ const detailsWrapper = document.querySelector(".details-wrapper");
 const loadMore = document.querySelector(".loadMore");
 const loader = document.querySelector(".loader");
 const genreBtn = document.querySelectorAll(".genre-btn");
-
+const fromYear = document.querySelector("#fromYear");
+const toYear = document.querySelector("#toYear");
+const TvSerialFilter = document.querySelector(".TvSerialFilter");
 let dataOfMovies;
+let accumulatedGenreMovies = [];
+
 let page;
 let currentQuery = "";
 let currentGenre = null;
+let filteredMovies;
+let typeValue = "";
 async function HomeMovies() {
   try {
     loader.classList.remove("hidden");
@@ -66,7 +72,7 @@ async function HomeMovies() {
     currentQuery = randomWord;
     page = 1;
     const res = await fetch(
-      `https://www.omdbapi.com/?s=${randomWord}&apikey=a0c86024`,
+      `https://www.omdbapi.com/?s=${randomWord}&apikey=6966b57d`,
     );
     const data = await res.json();
     dataOfMovies = data.Search;
@@ -77,12 +83,83 @@ async function HomeMovies() {
   }
 }
 
+////////////////
+
+///////////////////
+let fromValue = null;
+let toValue = null;
+let activeFromYear = null;
+let activeToYear = null;
+function getByYear(from, to) {
+  if (!dataOfMovies) return;
+
+  activeFromYear = from;
+  activeToYear = to;
+
+  const filteredYear = dataOfMovies.filter((movies) => {
+    const year = +movies.Year;
+    return year >= from && year <= to;
+  });
+  renderFilteredMovies(filteredYear);
+  console.log(dataOfMovies);
+}
+/////////////////////
+
+//////////////////////
+
+function getByMovOrSer(type) {
+  const filteredType = dataOfMovies.filter((movie) => movie.Type === type);
+  renderFilteredMovies(filteredType);
+}
+
+TvSerialFilter.addEventListener("change", function (e) {
+  typeValue = e.target.value;
+  if (typeValue) getByMovOrSer(typeValue);
+});
+
+//////////////////
+
+///////////////
+
+function createYearDropdown(selectElement) {
+  selectElement.innerHTML = `<option value="">Select Year</option>`;
+
+  for (let i = 1980; i <= 2026; i++) {
+    selectElement.insertAdjacentHTML(
+      "beforeend",
+      `<option value="${i}">${i}</option>`,
+    );
+  }
+}
+
+////////////////////////////
+
+//////////////////////
+fromYear.addEventListener("change", (e) => {
+  fromValue = +e.target.value;
+  if (fromValue && toValue) getByYear(fromValue, toValue);
+});
+
+///////////////////
+
+/////////////
+
+toYear.addEventListener("change", (e) => {
+  toValue = +e.target.value;
+  if (fromValue && toValue) getByYear(fromValue, toValue);
+});
+createYearDropdown(fromYear);
+createYearDropdown(toYear);
+
+/////////////////////
+
+/////////////////////
 async function getData() {
   try {
     loader.classList.remove("hidden");
 
     const res = await fetch(
-      `https://www.omdbapi.com/?s=${currentQuery}&apikey=a0c86024`,
+      `https://www.omdbapi.com/?s=${currentQuery}&apikey=6966b57d`,
     );
     const data = await res.json();
     if (data.Response === "False") {
@@ -97,6 +174,10 @@ async function getData() {
     loader.classList.add("hidden"); // ALWAYS STOP LOADER
   }
 }
+
+//////////////////////
+
+////////////////////////
 function renderFilteredMovies(movies) {
   const images = movies
     .map(
@@ -105,6 +186,7 @@ function renderFilteredMovies(movies) {
         <li>
           <a href="details.html?id=${movie.imdbID}">
             <img src="${movie.Poster}" />
+            
           </a>
         </li>
         <p class="title">${movie.Title}</p>
@@ -119,20 +201,28 @@ function renderFilteredMovies(movies) {
     </div>
   `;
 }
+
+////////////////////////
+
+///////////////
 async function getMoreMovies(query, page) {
   try {
     const res = await fetch(
-      `https://www.omdbapi.com/?s=${query}&page=${page}&apikey=a0c86024`,
+      `https://www.omdbapi.com/?s=${query}&page=${page}&apikey=6966b57d`,
     );
     const data = await res.json();
     loader.classList.add("hidden");
-    dataOfMovies = [...dataOfMovies, ...data.Search];
+    if (data.Response === "False") return null;
 
+    dataOfMovies = [...dataOfMovies, ...data.Search];
     return dataOfMovies;
   } catch (err) {
     console.log(err);
   }
 }
+///////////////
+
+///////////////////
 
 function getMovieIcon() {
   let images = dataOfMovies
@@ -141,7 +231,7 @@ function getMovieIcon() {
         `
       <div class="movieTitle">
       <li  ><a href="details.html?id=${poster.imdbID}"> <img src=${poster.Poster} /></a>   </li>
-                <p>${poster.Title} </p>
+                <p class="title">${poster.Title} </p>
     </div>
       `,
     )
@@ -157,14 +247,28 @@ function getMovieIcon() {
   moviesContainer.insertAdjacentHTML("beforeend", html);
 }
 
+////////////////
+
+////
+
 function renderError() {
   const p = document.createElement("p");
   p.classList.add("error");
   moviesContainer.innerHTML = `<p class="error">No Results</p>`;
 }
 
+//////////
+
+//////////////
 searchBtn.addEventListener("click", async function () {
   currentQuery = input.value;
+  currentGenre = null;
+  activeFromYear = null;
+  activeToYear = null;
+  fromValue = null;
+  toValue = null;
+  fromYear.value = "";
+  toYear.value = "";
   page = 1;
   await getData();
   moviesContainer.innerHTML = "";
@@ -176,47 +280,62 @@ searchBtn.addEventListener("click", async function () {
 
     return;
   }
+  moviesContainer.innerHTML = "";
 
   getMovieIcon();
   input.value = "";
   loadMore.removeAttribute("hidden");
 });
+/////////////
+
+/////////////
 
 loadMore.addEventListener("click", async function () {
   loader.classList.remove("hidden");
-
   page++;
-  if (currentGenre) {
-    const movies = await getMoreMovies(currentQuery, page);
 
-    if (!movies) {
-      loadMore.setAttribute("hidden", true);
-      loader.classList.add("hidden");
-      return;
-    }
+  const movies = await getMoreMovies(currentQuery, page);
 
+  if (!movies) {
+    loadMore.setAttribute("hidden", true);
+    loader.classList.add("hidden");
+    return;
+  }
+  moviesContainer.innerHTML = "";
+  if (activeFromYear && activeToYear) {
+    const filteredYear = dataOfMovies.filter((movie) => {
+      const year = +movie.Year;
+      return year >= activeFromYear && year <= activeToYear;
+    });
+    renderFilteredMovies(filteredYear);
+  }
+  if (typeValue) {
+    getByMovOrSer(typeValue);
+  } else if (currentGenre) {
     const detailedMovie = await Promise.all(
-      movies.map(async (movie) => {
+      movies.slice(-10).map(async (movie) => {
         const res = await fetch(
-          `https://www.omdbapi.com/?i=${movie.imdbID}&apikey=a0c86024`,
+          `https://www.omdbapi.com/?i=${movie.imdbID}&apikey=6966b57d`,
         );
         return await res.json();
       }),
     );
-
-    const FilteredData = detailedMovie.filter((movie) =>
+    const filtered = detailedMovie.filter((movie) =>
       movie.Genre?.toLowerCase().includes(currentGenre.toLowerCase()),
     );
-
-    moviesContainer.innerHTML = "";
-    renderFilteredMovies(FilteredData);
+    accumulatedGenreMovies = [...accumulatedGenreMovies, ...filtered]; // ← accumulate
+    renderFilteredMovies(accumulatedGenreMovies);
   } else {
-    const movies = await getMoreMovies(currentQuery, page);
     moviesContainer.innerHTML = "";
-    getMovieIcon();
+    renderFilteredMovies(dataOfMovies);
   }
+
   loader.classList.add("hidden");
 });
+
+///////////////////
+
+////////////////
 let genresArray;
 
 async function getByGenre(genre) {
@@ -226,7 +345,7 @@ async function getByGenre(genre) {
   const detailedMovie = await Promise.all(
     dataOfMovies.map(async (movie) => {
       const res = await fetch(
-        `https://www.omdbapi.com/?i=${movie.imdbID}&apikey=a0c86024`,
+        `https://www.omdbapi.com/?i=${movie.imdbID}&apikey=6966b57d`,
       );
       const data = await res.json();
 
@@ -238,7 +357,7 @@ async function getByGenre(genre) {
     genresArray = movie.Genre.split(", ").map((g) => g.toLowerCase());
     return genresArray.includes(genre.toLowerCase());
   });
-
+  accumulatedGenreMovies = FilteredData;
   moviesContainer.innerHTML = "";
   if (FilteredData.length === 0) {
     moviesContainer.innerHTML = `<p class="error">No movies found</p>`;
@@ -249,12 +368,16 @@ async function getByGenre(genre) {
   loader.classList.add("hidden");
 }
 
+/////////////////
+
 // const data = await res.json();
 
+////////////////////////
 genreBtn.forEach((btn) => {
   btn.addEventListener("click", async function (e) {
     const genre = e.target.dataset.genre;
     currentGenre = genre;
+    accumulatedGenreMovies = [];
     page = 1;
     await getByGenre(genre);
   });
@@ -262,7 +385,6 @@ genreBtn.forEach((btn) => {
 
 window.addEventListener("load", async function () {
   await HomeMovies();
-  moviesContainer.innerHTML = "";
 
   if (!dataOfMovies || dataOfMovies.length === 0) {
     loader.classList.add("hidden");
@@ -271,6 +393,7 @@ window.addEventListener("load", async function () {
 
     return;
   }
+  moviesContainer.innerHTML = "";
 
   getMovieIcon();
   input.value = "";
